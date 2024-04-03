@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://djsmueu6j75m0"]
+
+[ext_resource type="Script" path="res://scenes/chunk/chunk.gd" id="1_tuhht"]
+
+[node name="Chunk" type="StaticBody3D"]
+script = ExtResource("1_tuhht")
+
+[node name="MeshInstance" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true

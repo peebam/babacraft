@@ -1,0 +1,113 @@
+[gd_scene load_steps=13 format=3 uid="uid://cy2chtlbsa1ln"]
+
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_u1aw1"]
+[ext_resource type="PackedScene" uid="uid://btjphv3jemx26" path="res://scenes/player/target_line.tscn" id="2_11oto"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f4ulc"]
+albedo_color = Color(0.905882, 0.00784314, 0.356863, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ski5x"]
+material = SubResource("StandardMaterial3D_f4ulc")
+radius = 0.2
+height = 1.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wbfjx"]
+radius = 0.3
+height = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kx5bi"]
+albedo_color = Color(1, 1, 0.756863, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_gxqn1"]
+material = SubResource("StandardMaterial3D_kx5bi")
+radius = 0.05
+height = 0.1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pqumr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7oo3n"]
+transparency = 1
+albedo_color = Color(0.713726, 0.788235, 0.956863, 0.588235)
+
+[sub_resource type="BoxMesh" id="BoxMesh_55shv"]
+material = SubResource("StandardMaterial3D_7oo3n")
+size = Vector3(0.99, 0.99, 0.99)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ookld"]
+transparency = 1
+albedo_color = Color(0.878431, 0.796078, 0.247059, 0.588235)
+
+[sub_resource type="BoxMesh" id="BoxMesh_12iuu"]
+material = SubResource("StandardMaterial3D_ookld")
+size = Vector3(1.01, 1.01, 1.01)
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+script = ExtResource("1_u1aw1")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+mesh = SubResource("CapsuleMesh_ski5x")
+
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_wbfjx")
+
+[node name="Head" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Camera" type="Camera3D" parent="Head"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -0.2)
+current = true
+near = 0.005
+
+[node name="TargetLine" parent="Head/Camera" instance=ExtResource("2_11oto")]
+unique_name_in_owner = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Head/Camera"]
+
+[node name="CenterContainer" type="CenterContainer" parent="Head/Camera/CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Head/Camera/CanvasLayer/CenterContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "+"
+
+[node name="Cursor" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+mesh = SubResource("SphereMesh_gxqn1")
+
+[node name="LocationTargeted" type="Area3D" parent="."]
+unique_name_in_owner = true
+visible = false
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape3D" parent="LocationTargeted"]
+shape = SubResource("BoxShape3D_pqumr")
+
+[node name="Outline" type="MeshInstance3D" parent="LocationTargeted"]
+visible = false
+mesh = SubResource("BoxMesh_55shv")
+skeleton = NodePath("../..")
+
+[node name="BlocTargeted" type="Node3D" parent="."]
+unique_name_in_owner = true
+visible = false
+
+[node name="Outline" type="MeshInstance3D" parent="BlocTargeted"]
+mesh = SubResource("BoxMesh_12iuu")
+skeleton = NodePath("../..")
+
+[connection signal="moved" from="." to="." method="_on_moved"]
+[connection signal="block_targeted" from="Head/Camera/TargetLine" to="." method="_on_target_line_block_targeted"]
+[connection signal="cursor_disabled" from="Head/Camera/TargetLine" to="." method="_on_target_line_cursor_disabled"]
+[connection signal="cursor_moved" from="Head/Camera/TargetLine" to="." method="_on_target_line_cursor_moved"]
+[connection signal="location_targeted" from="Head/Camera/TargetLine" to="." method="_on_target_line_location_targeted"]
+[connection signal="body_entered" from="LocationTargeted" to="." method="_on_location_targeted_body_entered"]
+[connection signal="body_exited" from="LocationTargeted" to="." method="_on_location_targeted_body_exited"]

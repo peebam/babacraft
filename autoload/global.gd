@@ -2,7 +2,7 @@ extends Node
 
 const BLOCK_SIZE := Vector3.ONE
 const CHUNK_DIMENSION := Vector3i(16, 164, 16)
-const LOAD_RADIUS := 3
+const LOAD_RADIUS := 6
 const NB_THREADS := 2
 const TEXTURE_ATLAS_SIZE := Vector2(3, 3)
 

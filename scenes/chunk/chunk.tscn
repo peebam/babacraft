@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://djsmueu6j75m0"]
 
-[ext_resource type="Script" path="res://scenes/chunk/chunk.gd" id="1_tuhht"]
+[ext_resource type="Script" uid="uid://csttittj0s66r" path="res://scenes/chunk/chunk.gd" id="1_tuhht"]
 
 [node name="Chunk" type="StaticBody3D"]
 script = ExtResource("1_tuhht")

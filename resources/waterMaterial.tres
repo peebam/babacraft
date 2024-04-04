@@ -19,4 +19,4 @@ subsurf_scatter_skin_mode = true
 backlight = Color(1, 1, 1, 1)
 refraction_scale = -0.71
 texture_filter = 2
-proximity_fade_distance = 0.0
+proximity_fade_distance = 0.01

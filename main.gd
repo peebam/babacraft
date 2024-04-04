@@ -14,9 +14,11 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed("ui_quit"):
 		set_paused(not paused)
 
+
 func _ready() -> void:
 	_player_chunk_coordinates = _get_player_chunk_coordinates()
 	set_paused(paused)
+
 
 func _process(_delta: float) -> void:
 	var player_chunk_coordinates := _get_player_chunk_coordinates()

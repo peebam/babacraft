@@ -1,0 +1,82 @@
+[gd_scene load_steps=14 format=3 uid="uid://drxt0totrn0gc"]
+
+[ext_resource type="Script" uid="uid://deid0e7fwv7iy" path="res://sky.gd" id="2_41k34"]
+
+[sub_resource type="Gradient" id="Gradient_8srpb"]
+offsets = PackedFloat32Array(0.336691, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_02wa8"]
+noise_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pp1wm"]
+seamless = true
+color_ramp = SubResource("Gradient_8srpb")
+noise = SubResource("FastNoiseLite_02wa8")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4a61t"]
+sky_top_color = Color(0, 0, 0.0784314, 1)
+sky_horizon_color = Color(0, 0, 0.0784314, 1)
+sky_curve = 0.126135
+sky_energy_multiplier = 1.7
+sky_cover = SubResource("NoiseTexture2D_pp1wm")
+ground_curve = 0.00784588
+sun_curve = 0.121838
+
+[sub_resource type="Sky" id="Sky_ad8vq"]
+sky_material = SubResource("ProceduralSkyMaterial_4a61t")
+
+[sub_resource type="Environment" id="Environment_1ignh"]
+background_mode = 2
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_ad8vq")
+ambient_light_source = 2
+ambient_light_color = Color(0, 0, 0.0784314, 1)
+ambient_light_sky_contribution = 0.14
+ambient_light_energy = 0.1
+
+[sub_resource type="Gradient" id="Gradient_p478m"]
+offsets = PackedFloat32Array(0.229004, 0.280952, 0.361039, 0.687879, 0.824243, 0.876191, 1)
+colors = PackedColorArray(0, 0, 0.0784314, 1, 0.083145, 0.0894735, 0.299166, 1, 0.415686, 0.560784, 1, 1, 0.415686, 0.560784, 1, 1, 0.218887, 0.163497, 0.362402, 1, 0.0259492, 0.0212296, 0.222982, 1, 0, 0, 0.0784314, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6e4gc"]
+gradient = SubResource("Gradient_p478m")
+width = 64
+
+[sub_resource type="Gradient" id="Gradient_357uc"]
+offsets = PackedFloat32Array(0.164069, 0.235498, 0.276623, 0.436797, 0.690043, 0.765801, 0.848052, 0.902165)
+colors = PackedColorArray(0, 0, 0.0784314, 1, 0.283748, 0.167459, 0.0968831, 1, 0.853223, 0.494649, 0.114252, 1, 0.814397, 0.855334, 0.976928, 1, 0.499216, 0.485544, 0.674115, 1, 0.245446, 0.0540292, 0.0770212, 1, 0.202971, 0.00202099, 0.1196, 1, 0, 0, 0.0784314, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_b4tv8"]
+gradient = SubResource("Gradient_357uc")
+
+[sub_resource type="Gradient" id="Gradient_no8ew"]
+offsets = PackedFloat32Array(0.168398, 0.233333, 0.265801, 0.369697, 0.627273, 0.761472, 0.826407, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.408137, 0.0248244, 0.0309729, 1, 1, 0.454902, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.979407, 0.256968, 0.332911, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_h8go7"]
+gradient = SubResource("Gradient_no8ew")
+
+[node name="Sky" type="WorldEnvironment"]
+environment = SubResource("Environment_1ignh")
+script = ExtResource("2_41k34")
+sky_top_color = SubResource("GradientTexture1D_6e4gc")
+sky_horizon_color = SubResource("GradientTexture1D_b4tv8")
+sun_light_color = SubResource("GradientTexture1D_h8go7")
+time_of_day = 0.0
+
+[node name="SunMoon" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1.19249e-08, -0.999999, 0, 0.999999, 1.19249e-08, 0, 0, 0)
+
+[node name="Sun" type="DirectionalLight3D" parent="SunMoon"]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 0, 0, 455)
+light_color = Color(0, 0, 0, 1)
+light_angular_distance = 3.98
+shadow_enabled = true
+
+[node name="Moon" type="DirectionalLight3D" parent="SunMoon"]
+transform = Transform3D(0.978148, -1.81762e-08, 0.207912, 0, -1, -8.74228e-08, 0.207912, 8.55124e-08, -0.978148, 0, 0, -455)
+light_energy = 0.05
+light_indirect_energy = 0.5
+shadow_enabled = true
+
+[connection signal="time_of_day_set" from="." to="." method="_on_time_of_day_set"]
